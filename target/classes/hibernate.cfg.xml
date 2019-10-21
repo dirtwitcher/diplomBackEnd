@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>      
+  <session-factory>
+    <!-- Database connection settings -->
+    <property name="connection.url">jdbc:mysql://localhost:3306/diplom?serverTimezone=UTC</property>
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+    
+    <property name="connection.username">root</property>
+    <property name="connection.password">28327431</property>
+    
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="connection.pool_size">5</property>
+    <property name="show_sql">true</property>
+    <property name="format_sql">true</property>
+    <property name="use_sql_comments">false</property>
+    <property name="current_session_context_class">thread</property>
+
+	<mapping class="entity.TypeAuto"></mapping>
+    <mapping class="entity.Auto"></mapping>
+    <mapping class="entity.Dvigatel"></mapping>
+    <mapping class="entity.Kpp"></mapping>
+    <mapping class="entity.KuzovnieDetali"></mapping>
+    <mapping class="entity.ToplivnayaSistema"></mapping>
+    <mapping class="entity.KolesaDiski"></mapping>
+    <mapping class="entity.DopTovari"></mapping>
+    <mapping class="entity.Podveska"></mapping>
+    <mapping class="entity.Transmissiya"></mapping>
+    <mapping class="entity.OsnaschKuzova"></mapping>
+    <mapping class="entity.SistemaOhlajdeniya"></mapping>
+    <mapping class="entity.Elektrika"></mapping>
+    <mapping class="entity.RulevoeUpravlenie"></mapping>
+    <mapping class="entity.OtoplenieKondei"></mapping>
+    <mapping class="entity.OsvetPribory"></mapping>
+    <mapping class="entity.Tormoza"></mapping>
+	<mapping class="entity.KorpusaPatrubki"></mapping>
+    <mapping class="entity.Polzovatel"></mapping>
+    <mapping class="entity.Jurnal"></mapping>    
+     
+  </session-factory>
+</hibernate-configuration>
