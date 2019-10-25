@@ -1,14 +1,10 @@
 package entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,9 +15,9 @@ public class ToplivnayaSistema {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_toplivnayaSistema;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_auto")
-    private Auto id_auto;
+    // @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @JoinColumn(name = "id_auto")
+    // private Auto id_auto;
 
     @Column(name = "typeDetali", length = 120)
     private String typeDetali;
@@ -46,18 +42,14 @@ public class ToplivnayaSistema {
 	return id_toplivnayaSistema;
     }
 
-    public void setId_toplivnayaSistema(int id_toplivnayaSistema) {
-	this.id_toplivnayaSistema = id_toplivnayaSistema;
-    }
-
-    public Auto getId_auto() {
-	return id_auto;
-    }
-
-    public void setId_auto(Auto id_auto) {
-	this.id_auto = id_auto;
-    }
-
+//    public void setId_toplivnayaSistema(int id_toplivnayaSistema) {
+//	this.id_toplivnayaSistema = id_toplivnayaSistema;
+//    }
+    /*
+     * public Auto getId_auto() { return id_auto; }
+     * 
+     * public void setId_auto(Auto id_auto) { this.id_auto = id_auto; }
+     */
     public String getTypeDetali() {
 	return typeDetali;
     }

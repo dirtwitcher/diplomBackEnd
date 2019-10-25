@@ -30,9 +30,9 @@ public class Polzovatel {
 	return id_polzovatel;
     }
 
-    public void setId_polzovatel(int id_polzovatel) {
-	this.id_polzovatel = id_polzovatel;
-    }
+//    public void setId_polzovatel(int id_polzovatel) {
+//	this.id_polzovatel = id_polzovatel;
+//    }
 
     public String getFIO() {
 	return FIO;

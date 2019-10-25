@@ -68,9 +68,9 @@ public class KolesaDiski {
 	return id_kolesaDiski;
     }
 
-    public void setId_kolesaDiski(int id_kolesaDiski) {
-	this.id_kolesaDiski = id_kolesaDiski;
-    }
+//    public void setId_kolesaDiski(int id_kolesaDiski) {
+//	this.id_kolesaDiski = id_kolesaDiski;
+//    }
 
     public String getTypeDetali() {
 	return typeDetali;

@@ -1,14 +1,10 @@
 package entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,9 +15,9 @@ public class OtoplenieKondei {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_otoplenieKondei;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_auto")
-    private Auto id_auto;
+    // @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @JoinColumn(name = "id_auto")
+    // private Auto id_auto;
 
     @Column(name = "typeDetali", length = 120)
     private String typeDetali;
@@ -49,18 +45,14 @@ public class OtoplenieKondei {
 	return id_otoplenieKondei;
     }
 
-    public void setId_otoplenieKondei(int id_otoplenieKondei) {
-	this.id_otoplenieKondei = id_otoplenieKondei;
-    }
-
-    public Auto getId_auto() {
-	return id_auto;
-    }
-
-    public void setId_auto(Auto id_auto) {
-	this.id_auto = id_auto;
-    }
-
+//    public void setId_otoplenieKondei(int id_otoplenieKondei) {
+//	this.id_otoplenieKondei = id_otoplenieKondei;
+//    }
+    /*
+     * public Auto getId_auto() { return id_auto; }
+     * 
+     * public void setId_auto(Auto id_auto) { this.id_auto = id_auto; }
+     */
     public String getTypeDetali() {
 	return typeDetali;
     }

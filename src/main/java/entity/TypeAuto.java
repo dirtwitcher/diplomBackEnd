@@ -1,15 +1,10 @@
 package entity;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -26,8 +21,9 @@ public class TypeAuto {
     @Column(name = "model", length = 25)
     private String model;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id_typeAuto", cascade = CascadeType.ALL)
-    private List<Auto> autoList;
+    // @OneToMany(fetch = FetchType.LAZY, mappedBy = "id_typeAuto", cascade =
+    // CascadeType.ALL)
+    // private List<Auto> autoList;
 
     public TypeAuto() {
     }
@@ -36,9 +32,9 @@ public class TypeAuto {
 	return id_typeAuto;
     }
 
-    public void setId_typeAuto(int id_typeAuto) {
-	this.id_typeAuto = id_typeAuto;
-    }
+//    public void setId_typeAuto(int id_typeAuto) {
+//	this.id_typeAuto = id_typeAuto;
+//    }
 
     public String getMarka() {
 	return marka;
@@ -56,13 +52,11 @@ public class TypeAuto {
 	this.model = model;
     }
 
-    public List<Auto> getAutoList() {
-	return autoList;
-    }
-
-    public void setAutoList(List<Auto> autoList) {
-	this.autoList = autoList;
-    }
+    /*
+     * public List<Auto> getAutoList() { return autoList; }
+     * 
+     * public void setAutoList(List<Auto> autoList) { this.autoList = autoList; }
+     */
 
     @Override
     public String toString() {

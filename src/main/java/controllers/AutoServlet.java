@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -57,10 +58,12 @@ public class AutoServlet extends HttpServlet {
 
 // ----------------------------------------------
 
-	autoService.findAllAuto();
+	List<Auto> autos = autoService.findAllAuto();
 
-	String json = new Gson().toJson(autoService);
-	response.setContentType("application/jsonp");
+	String json = gson.toJson(autos);
+
+	System.out.println(json);
+	response.setContentType("application/json");
 	response.getWriter().write(json);
     }
 

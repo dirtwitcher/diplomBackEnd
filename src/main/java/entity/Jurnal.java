@@ -36,9 +36,9 @@ public class Jurnal {
 	return id_jurnal;
     }
 
-    public void setId_jurnal(int id_jurnal) {
-	this.id_jurnal = id_jurnal;
-    }
+//    public void setId_jurnal(int id_jurnal) {
+//	this.id_jurnal = id_jurnal;
+//    }
 
     public String getFIO() {
 	return FIO;
