@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import entity.Auto;
-import services.AutoService;
+import entity.KuzovnieDetali;
+import services.KuzovnieDetaliService;
 
-public class AutoServlet extends HttpServlet {
+public class KuzovnieDetaliServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    public AutoServlet() {
+    public KuzovnieDetaliServlet() {
     }
 
     @Override
@@ -30,12 +30,12 @@ public class AutoServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "GET");
 
-	System.out.println("Enter Auto doGet");
+	System.out.println("Enter KuzovnieDetali doGet");
 
 	Gson gson = new Gson();
-	AutoService autoService = new AutoService();
-	List<Auto> autoList = autoService.findAllAuto();
-	String json = gson.toJson(autoList);
+	KuzovnieDetaliService kuzovnieDetaliService = new KuzovnieDetaliService();
+	List<KuzovnieDetali> kuzovnieDetaliList = kuzovnieDetaliService.findAllKuzovnieDetali();
+	String json = gson.toJson(kuzovnieDetaliList);
 	response.getWriter().write(json);
     }
 
@@ -48,24 +48,24 @@ public class AutoServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "POST");
 
-	System.out.println("Enter Auto doPost");
+	System.out.println("Enter KuzovnieDetali doPost");
 
-	Auto auto = null;
+	KuzovnieDetali kuzovnieDetali = null;
 
 	Gson gson = new Gson();
 	@SuppressWarnings("rawtypes")
 	Enumeration en = request.getParameterNames();
 
 	while (en.hasMoreElements()) {
-	    auto = gson.fromJson((String) en.nextElement(), Auto.class);
+	    kuzovnieDetali = gson.fromJson((String) en.nextElement(), KuzovnieDetali.class);
 	}
 
-	AutoService autoService = new AutoService();
-	autoService.createAuto(auto);
+	KuzovnieDetaliService kuzovnieDetaliService = new KuzovnieDetaliService();
+	kuzovnieDetaliService.createKuzovnieDetali(kuzovnieDetali);
 
 	// response
-	List<Auto> autoList = autoService.findAllAuto();
-	String json = gson.toJson(autoList);
+	List<KuzovnieDetali> kuzovnieDetaliList = kuzovnieDetaliService.findAllKuzovnieDetali();
+	String json = gson.toJson(kuzovnieDetaliList);
 	response.getWriter().write(json);
     }
 

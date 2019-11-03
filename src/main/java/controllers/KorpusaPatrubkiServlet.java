@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import entity.Auto;
-import services.AutoService;
+import entity.KorpusaPatrubki;
+import services.KorpusaPatrubkiService;
 
-public class AutoServlet extends HttpServlet {
+public class KorpusaPatrubkiServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    public AutoServlet() {
+    public KorpusaPatrubkiServlet() {
     }
 
     @Override
@@ -30,12 +30,12 @@ public class AutoServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "GET");
 
-	System.out.println("Enter Auto doGet");
+	System.out.println("Enter KorpusaPatrubki doGet");
 
 	Gson gson = new Gson();
-	AutoService autoService = new AutoService();
-	List<Auto> autoList = autoService.findAllAuto();
-	String json = gson.toJson(autoList);
+	KorpusaPatrubkiService korpusaPatrubkiService = new KorpusaPatrubkiService();
+	List<KorpusaPatrubki> korpusaPatrubkiList = korpusaPatrubkiService.findAllKorpusaPatrubki();
+	String json = gson.toJson(korpusaPatrubkiList);
 	response.getWriter().write(json);
     }
 
@@ -48,24 +48,24 @@ public class AutoServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "POST");
 
-	System.out.println("Enter Auto doPost");
+	System.out.println("Enter KorpusaPatrubki doPost");
 
-	Auto auto = null;
+	KorpusaPatrubki korpusaPatrubki = null;
 
 	Gson gson = new Gson();
 	@SuppressWarnings("rawtypes")
 	Enumeration en = request.getParameterNames();
 
 	while (en.hasMoreElements()) {
-	    auto = gson.fromJson((String) en.nextElement(), Auto.class);
+	    korpusaPatrubki = gson.fromJson((String) en.nextElement(), KorpusaPatrubki.class);
 	}
 
-	AutoService autoService = new AutoService();
-	autoService.createAuto(auto);
+	KorpusaPatrubkiService korpusaPatrubkiService = new KorpusaPatrubkiService();
+	korpusaPatrubkiService.createKorpusaPatrubki(korpusaPatrubki);
 
 	// response
-	List<Auto> autoList = autoService.findAllAuto();
-	String json = gson.toJson(autoList);
+	List<KorpusaPatrubki> korpusaPatrubkiList = korpusaPatrubkiService.findAllKorpusaPatrubki();
+	String json = gson.toJson(korpusaPatrubkiList);
 	response.getWriter().write(json);
     }
 

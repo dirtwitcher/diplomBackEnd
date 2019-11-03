@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import entity.Auto;
-import services.AutoService;
+import entity.Elektrika;
+import services.ElektrikaService;
 
-public class AutoServlet extends HttpServlet {
+public class ElektrikaServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    public AutoServlet() {
+    public ElektrikaServlet() {
     }
 
     @Override
@@ -30,12 +30,12 @@ public class AutoServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "GET");
 
-	System.out.println("Enter Auto doGet");
+	System.out.println("Enter Elektrika doGet");
 
 	Gson gson = new Gson();
-	AutoService autoService = new AutoService();
-	List<Auto> autoList = autoService.findAllAuto();
-	String json = gson.toJson(autoList);
+	ElektrikaService elektrikaService = new ElektrikaService();
+	List<Elektrika> elektrikaList = elektrikaService.findAllElektrika();
+	String json = gson.toJson(elektrikaList);
 	response.getWriter().write(json);
     }
 
@@ -48,24 +48,24 @@ public class AutoServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "POST");
 
-	System.out.println("Enter Auto doPost");
+	System.out.println("Enter Elektrika doPost");
 
-	Auto auto = null;
+	Elektrika elektrika = null;
 
 	Gson gson = new Gson();
 	@SuppressWarnings("rawtypes")
 	Enumeration en = request.getParameterNames();
 
 	while (en.hasMoreElements()) {
-	    auto = gson.fromJson((String) en.nextElement(), Auto.class);
+	    elektrika = gson.fromJson((String) en.nextElement(), Elektrika.class);
 	}
 
-	AutoService autoService = new AutoService();
-	autoService.createAuto(auto);
+	ElektrikaService elektrikaService = new ElektrikaService();
+	elektrikaService.createElektrika(elektrika);
 
 	// response
-	List<Auto> autoList = autoService.findAllAuto();
-	String json = gson.toJson(autoList);
+	List<Elektrika> elektrikaList = elektrikaService.findAllElektrika();
+	String json = gson.toJson(elektrikaList);
 	response.getWriter().write(json);
     }
 

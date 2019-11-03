@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import entity.Auto;
-import services.AutoService;
+import entity.Jurnal;
+import services.JurnalService;
 
-public class AutoServlet extends HttpServlet {
+public class JurnalServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    public AutoServlet() {
+    public JurnalServlet() {
     }
 
     @Override
@@ -30,12 +30,12 @@ public class AutoServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "GET");
 
-	System.out.println("Enter Auto doGet");
+	System.out.println("Enter Jurnal doGet");
 
 	Gson gson = new Gson();
-	AutoService autoService = new AutoService();
-	List<Auto> autoList = autoService.findAllAuto();
-	String json = gson.toJson(autoList);
+	JurnalService jurnalService = new JurnalService();
+	List<Jurnal> jurnalList = jurnalService.findAllJurnal();
+	String json = gson.toJson(jurnalList);
 	response.getWriter().write(json);
     }
 
@@ -48,24 +48,24 @@ public class AutoServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "POST");
 
-	System.out.println("Enter Auto doPost");
+	System.out.println("Enter Jurnal doPost");
 
-	Auto auto = null;
+	Jurnal jurnal = null;
 
 	Gson gson = new Gson();
 	@SuppressWarnings("rawtypes")
 	Enumeration en = request.getParameterNames();
 
 	while (en.hasMoreElements()) {
-	    auto = gson.fromJson((String) en.nextElement(), Auto.class);
+	    jurnal = gson.fromJson((String) en.nextElement(), Jurnal.class);
 	}
 
-	AutoService autoService = new AutoService();
-	autoService.createAuto(auto);
+	JurnalService jurnalService = new JurnalService();
+	jurnalService.createJurnal(jurnal);
 
 	// response
-	List<Auto> autoList = autoService.findAllAuto();
-	String json = gson.toJson(autoList);
+	List<Jurnal> jurnalList = jurnalService.findAllJurnal();
+	String json = gson.toJson(jurnalList);
 	response.getWriter().write(json);
     }
 
