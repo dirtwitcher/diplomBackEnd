@@ -41,6 +41,9 @@ public class KuzovnieDetali {
     // @Lob(type = LobType.BLOB)
     private byte[] image;
 
+    @Column(name = "cena")
+    private Double cena;
+
     public KuzovnieDetali() {
     }
 
@@ -110,6 +113,14 @@ public class KuzovnieDetali {
 
     public void setImage(byte[] image) {
 	this.image = image;
+    }
+
+    public Double getCena() {
+	return cena;
+    }
+
+    public void setCena(Double cena) {
+	this.cena = cena;
     }
 
     @Override

@@ -38,6 +38,9 @@ public class OtoplenieKondei {
     // @Lob(type = LobType.BLOB)
     private byte[] image;
 
+    @Column(name = "cena")
+    private Double cena;
+
     public OtoplenieKondei() {
     }
 
@@ -99,6 +102,14 @@ public class OtoplenieKondei {
 
     public void setImage(byte[] image) {
 	this.image = image;
+    }
+
+    public Double getCena() {
+	return cena;
+    }
+
+    public void setCena(Double cena) {
+	this.cena = cena;
     }
 
     @Override

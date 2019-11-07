@@ -69,4 +69,64 @@ public class DopTovariServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "PUT");
+
+	System.out.println("Enter DopTovari doPut");
+
+	DopTovari dopTovari = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    dopTovari = gson.fromJson((String) en.nextElement(), DopTovari.class);
+	}
+
+	DopTovariService dopTovariService = new DopTovariService();
+	dopTovariService.updateDopTovari(dopTovari);
+
+	// response
+	List<DopTovari> dopTovariList = dopTovariService.findAllDopTovari();
+	String json = gson.toJson(dopTovariList);
+	response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "DELETE");
+
+	System.out.println("Enter DopTovari doDelete");
+
+	DopTovari dopTovari = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    dopTovari = gson.fromJson((String) en.nextElement(), DopTovari.class);
+	}
+
+	DopTovariService dopTovariService = new DopTovariService();
+	dopTovariService.deleteDopTovari(dopTovari);
+
+	// response
+	List<DopTovari> dopTovariList = dopTovariService.findAllDopTovari();
+	String json = gson.toJson(dopTovariList);
+	response.getWriter().write(json);
+    }
+
 }

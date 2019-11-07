@@ -69,4 +69,64 @@ public class ElektrikaServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "PUT");
+
+	System.out.println("Enter Elektrika doPut");
+
+	Elektrika elektrika = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    elektrika = gson.fromJson((String) en.nextElement(), Elektrika.class);
+	}
+
+	ElektrikaService elektrikaService = new ElektrikaService();
+	elektrikaService.updateElektrika(elektrika);
+
+	// response
+	List<Elektrika> elektrikaList = elektrikaService.findAllElektrika();
+	String json = gson.toJson(elektrikaList);
+	response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "DELETE");
+
+	System.out.println("Enter Elektrika doDelete");
+
+	Elektrika elektrika = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    elektrika = gson.fromJson((String) en.nextElement(), Elektrika.class);
+	}
+
+	ElektrikaService elektrikaService = new ElektrikaService();
+	elektrikaService.deleteElektrika(elektrika);
+
+	// response
+	List<Elektrika> elektrikaList = elektrikaService.findAllElektrika();
+	String json = gson.toJson(elektrikaList);
+	response.getWriter().write(json);
+    }
+
 }

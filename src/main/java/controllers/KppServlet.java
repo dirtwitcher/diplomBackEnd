@@ -69,4 +69,64 @@ public class KppServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "PUT");
+
+	System.out.println("Enter AUTO doPut");
+
+	Kpp kpp = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    kpp = gson.fromJson((String) en.nextElement(), Kpp.class);
+	}
+
+	KppService kppService = new KppService();
+	kppService.updateKpp(kpp);
+
+	// response
+	List<Kpp> kppList = kppService.findAllKpp();
+	String json = gson.toJson(kppList);
+	response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "DELETE");
+
+	System.out.println("Enter AUTO doDelete");
+
+	Kpp kpp = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    kpp = gson.fromJson((String) en.nextElement(), Kpp.class);
+	}
+
+	KppService kppService = new KppService();
+	kppService.deleteKpp(kpp);
+
+	// response
+	List<Kpp> kppList = kppService.findAllKpp();
+	String json = gson.toJson(kppList);
+	response.getWriter().write(json);
+    }
+
 }

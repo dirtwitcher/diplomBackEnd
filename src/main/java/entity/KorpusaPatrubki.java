@@ -35,6 +35,9 @@ public class KorpusaPatrubki {
     // @Lob(type = LobType.BLOB)
     private byte[] image;
 
+    @Column(name = "cena")
+    private Double cena;
+
     public KorpusaPatrubki() {
     }
 
@@ -88,6 +91,14 @@ public class KorpusaPatrubki {
 
     public void setImage(byte[] image) {
 	this.image = image;
+    }
+
+    public Double getCena() {
+	return cena;
+    }
+
+    public void setCena(Double cena) {
+	this.cena = cena;
     }
 
     @Override

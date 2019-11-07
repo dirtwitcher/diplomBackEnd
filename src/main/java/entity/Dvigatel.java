@@ -32,6 +32,9 @@ public class Dvigatel {
     // @Lob(type = LobType.BLOB)
     private byte[] image;
 
+    @Column(name = "cena")
+    private Double cena;
+
     public Dvigatel() {
     }
 
@@ -77,6 +80,14 @@ public class Dvigatel {
 
     public void setImage(byte[] image) {
 	this.image = image;
+    }
+
+    public Double getCena() {
+	return cena;
+    }
+
+    public void setCena(Double cena) {
+	this.cena = cena;
     }
 
     @Override

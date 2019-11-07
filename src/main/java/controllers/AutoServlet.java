@@ -69,4 +69,65 @@ public class AutoServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    // update
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "PUT");
+
+	System.out.println("Enter Auto doPut");
+
+	Auto auto = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    auto = gson.fromJson((String) en.nextElement(), Auto.class);
+	}
+
+	AutoService autoService = new AutoService();
+	autoService.updateAuto(auto);
+
+	// response
+	List<Auto> autoList = autoService.findAllAuto();
+	String json = gson.toJson(autoList);
+	response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "DELETE");
+
+	System.out.println("Enter Auto doDelete");
+
+	Auto auto = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    auto = gson.fromJson((String) en.nextElement(), Auto.class);
+	}
+
+	AutoService autoService = new AutoService();
+	autoService.deleteAuto(auto);
+
+	// response
+	List<Auto> autoList = autoService.findAllAuto();
+	String json = gson.toJson(autoList);
+	response.getWriter().write(json);
+    }
+
 }

@@ -69,4 +69,64 @@ public class KorpusaPatrubkiServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "PUT");
+
+	System.out.println("Enter KorpusaPatrubki doPut");
+
+	KorpusaPatrubki korpusaPatrubki = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    korpusaPatrubki = gson.fromJson((String) en.nextElement(), KorpusaPatrubki.class);
+	}
+
+	KorpusaPatrubkiService korpusaPatrubkiService = new KorpusaPatrubkiService();
+	korpusaPatrubkiService.updateKorpusaPatrubki(korpusaPatrubki);
+
+	// response
+	List<KorpusaPatrubki> korpusaPatrubkiList = korpusaPatrubkiService.findAllKorpusaPatrubki();
+	String json = gson.toJson(korpusaPatrubkiList);
+	response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "DELETE");
+
+	System.out.println("Enter KorpusaPatrubki doDelete");
+
+	KorpusaPatrubki korpusaPatrubki = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    korpusaPatrubki = gson.fromJson((String) en.nextElement(), KorpusaPatrubki.class);
+	}
+
+	KorpusaPatrubkiService korpusaPatrubkiService = new KorpusaPatrubkiService();
+	korpusaPatrubkiService.deleteKorpusaPatrubki(korpusaPatrubki);
+
+	// response
+	List<KorpusaPatrubki> korpusaPatrubkiList = korpusaPatrubkiService.findAllKorpusaPatrubki();
+	String json = gson.toJson(korpusaPatrubkiList);
+	response.getWriter().write(json);
+    }
+
 }

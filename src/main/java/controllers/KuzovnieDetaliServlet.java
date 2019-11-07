@@ -69,4 +69,64 @@ public class KuzovnieDetaliServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "PUT");
+
+	System.out.println("Enter KuzovnieDetali doPut");
+
+	KuzovnieDetali kuzovnieDetali = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    kuzovnieDetali = gson.fromJson((String) en.nextElement(), KuzovnieDetali.class);
+	}
+
+	KuzovnieDetaliService kuzovnieDetaliService = new KuzovnieDetaliService();
+	kuzovnieDetaliService.updateKuzovnieDetali(kuzovnieDetali);
+
+	// response
+	List<KuzovnieDetali> kuzovnieDetaliList = kuzovnieDetaliService.findAllKuzovnieDetali();
+	String json = gson.toJson(kuzovnieDetaliList);
+	response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "DELETE");
+
+	System.out.println("Enter KuzovnieDetali doDelete");
+
+	KuzovnieDetali kuzovnieDetali = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    kuzovnieDetali = gson.fromJson((String) en.nextElement(), KuzovnieDetali.class);
+	}
+
+	KuzovnieDetaliService kuzovnieDetaliService = new KuzovnieDetaliService();
+	kuzovnieDetaliService.deleteKuzovnieDetali(kuzovnieDetali);
+
+	// response
+	List<KuzovnieDetali> kuzovnieDetaliList = kuzovnieDetaliService.findAllKuzovnieDetali();
+	String json = gson.toJson(kuzovnieDetaliList);
+	response.getWriter().write(json);
+    }
+
 }

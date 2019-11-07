@@ -35,6 +35,9 @@ public class OsnaschKuzova {
     // @Lob(type = LobType.BLOB)
     private byte[] image;
 
+    @Column(name = "cena")
+    private Double cena;
+
     public OsnaschKuzova() {
     }
 
@@ -88,6 +91,14 @@ public class OsnaschKuzova {
 
     public void setImage(byte[] image) {
 	this.image = image;
+    }
+
+    public Double getCena() {
+	return cena;
+    }
+
+    public void setCena(Double cena) {
+	this.cena = cena;
     }
 
     @Override

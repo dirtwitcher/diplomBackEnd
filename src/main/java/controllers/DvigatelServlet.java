@@ -69,4 +69,64 @@ public class DvigatelServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "PUT");
+
+	System.out.println("Enter Dvigatel doPut");
+
+	Dvigatel dvigatel = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    dvigatel = gson.fromJson((String) en.nextElement(), Dvigatel.class);
+	}
+
+	DvigatelService dvigatelService = new DvigatelService();
+	dvigatelService.updateDvigatel(dvigatel);
+
+	// response
+	List<Dvigatel> dvigatelList = dvigatelService.findAllDvigatel();
+	String json = gson.toJson(dvigatelList);
+	response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+
+	response.setContentType("application/json");
+	response.setCharacterEncoding("UTF-8");
+	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+	response.setHeader("Access-Control-Allow-Methods", "DELETE");
+
+	System.out.println("Enter Dvigatel doDelete");
+
+	Dvigatel dvigatel = null;
+
+	Gson gson = new Gson();
+	@SuppressWarnings("rawtypes")
+	Enumeration en = request.getParameterNames();
+
+	while (en.hasMoreElements()) {
+	    dvigatel = gson.fromJson((String) en.nextElement(), Dvigatel.class);
+	}
+
+	DvigatelService dvigatelService = new DvigatelService();
+	dvigatelService.deleteDvigatel(dvigatel);
+
+	// response
+	List<Dvigatel> dvigatelList = dvigatelService.findAllDvigatel();
+	String json = gson.toJson(dvigatelList);
+	response.getWriter().write(json);
+    }
+
 }
