@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class KuzovnieDetaliServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class KuzovnieDetaliServlet extends HttpServlet {
 
 	System.out.println("Enter KuzovnieDetali doPut");
 
-	KuzovnieDetali kuzovnieDetali = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    kuzovnieDetali = gson.fromJson((String) en.nextElement(), KuzovnieDetali.class);
-	}
+	KuzovnieDetali kuzovnieDetali = gson.fromJson(body, KuzovnieDetali.class);
 
 	KuzovnieDetaliService kuzovnieDetaliService = new KuzovnieDetaliService();
 	kuzovnieDetaliService.updateKuzovnieDetali(kuzovnieDetali);
@@ -110,20 +117,14 @@ public class KuzovnieDetaliServlet extends HttpServlet {
 
 	System.out.println("Enter KuzovnieDetali doDelete");
 
-	KuzovnieDetali kuzovnieDetali = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    kuzovnieDetali = gson.fromJson((String) en.nextElement(), KuzovnieDetali.class);
-	}
+	Integer kuzovnieDetaliId = Integer.parseInt(request.getParameter("id_kuzovnieDetali"));
 
 	KuzovnieDetaliService kuzovnieDetaliService = new KuzovnieDetaliService();
+	KuzovnieDetali kuzovnieDetali = kuzovnieDetaliService.findKuzovnieDetali(kuzovnieDetaliId);
 	kuzovnieDetaliService.deleteKuzovnieDetali(kuzovnieDetali);
 
 	// response
+	Gson gson = new Gson();
 	List<KuzovnieDetali> kuzovnieDetaliList = kuzovnieDetaliService.findAllKuzovnieDetali();
 	String json = gson.toJson(kuzovnieDetaliList);
 	response.getWriter().write(json);

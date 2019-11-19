@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class TormozaServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class TormozaServlet extends HttpServlet {
 
 	System.out.println("Enter Tormoza doPut");
 
-	Tormoza tormoza = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    tormoza = gson.fromJson((String) en.nextElement(), Tormoza.class);
-	}
+	Tormoza tormoza = gson.fromJson(body, Tormoza.class);
 
 	TormozaService tormozaService = new TormozaService();
 	tormozaService.updateTormoza(tormoza);
@@ -110,20 +117,14 @@ public class TormozaServlet extends HttpServlet {
 
 	System.out.println("Enter Tormoza doDelete");
 
-	Tormoza tormoza = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    tormoza = gson.fromJson((String) en.nextElement(), Tormoza.class);
-	}
+	Integer tormozaId = Integer.parseInt(request.getParameter("id_tormoza"));
 
 	TormozaService tormozaService = new TormozaService();
+	Tormoza tormoza = tormozaService.findTormoza(tormozaId);
 	tormozaService.deleteTormoza(tormoza);
 
 	// response
+	Gson gson = new Gson();
 	List<Tormoza> tormozaList = tormozaService.findAllTormoza();
 	String json = gson.toJson(tormozaList);
 	response.getWriter().write(json);

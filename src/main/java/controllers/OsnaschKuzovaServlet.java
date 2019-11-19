@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class OsnaschKuzovaServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class OsnaschKuzovaServlet extends HttpServlet {
 
 	System.out.println("Enter OsnaschKuzova doPut");
 
-	OsnaschKuzova osnaschKuzova = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    osnaschKuzova = gson.fromJson((String) en.nextElement(), OsnaschKuzova.class);
-	}
+	OsnaschKuzova osnaschKuzova = gson.fromJson(body, OsnaschKuzova.class);
 
 	OsnaschKuzovaService osnaschKuzovaService = new OsnaschKuzovaService();
 	osnaschKuzovaService.updateOsnaschKuzova(osnaschKuzova);
@@ -110,20 +117,14 @@ public class OsnaschKuzovaServlet extends HttpServlet {
 
 	System.out.println("Enter OsnaschKuzova doDelete");
 
-	OsnaschKuzova osnaschKuzova = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    osnaschKuzova = gson.fromJson((String) en.nextElement(), OsnaschKuzova.class);
-	}
+	Integer osnaschKuzovaId = Integer.parseInt(request.getParameter("id_osnaschKuzova"));
 
 	OsnaschKuzovaService osnaschKuzovaService = new OsnaschKuzovaService();
+	OsnaschKuzova osnaschKuzova = osnaschKuzovaService.findOsnaschKuzova(osnaschKuzovaId);
 	osnaschKuzovaService.deleteOsnaschKuzova(osnaschKuzova);
 
 	// response
+	Gson gson = new Gson();
 	List<OsnaschKuzova> osnaschKuzovaList = osnaschKuzovaService.findAllOsnaschKuzova();
 	String json = gson.toJson(osnaschKuzovaList);
 	response.getWriter().write(json);

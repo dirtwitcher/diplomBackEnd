@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class TypeAutoServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class TypeAutoServlet extends HttpServlet {
 
 	System.out.println("Enter TypeAuto doPut");
 
-	TypeAuto typeAuto = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    typeAuto = gson.fromJson((String) en.nextElement(), TypeAuto.class);
-	}
+	TypeAuto typeAuto = gson.fromJson(body, TypeAuto.class);
 
 	TypeAutoService typeAutoService = new TypeAutoService();
 	typeAutoService.updateTypeAuto(typeAuto);
@@ -110,20 +117,14 @@ public class TypeAutoServlet extends HttpServlet {
 
 	System.out.println("Enter TypeAuto doDelete");
 
-	TypeAuto typeAuto = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    typeAuto = gson.fromJson((String) en.nextElement(), TypeAuto.class);
-	}
+	Integer typeAutoId = Integer.parseInt(request.getParameter("id_typeAuto"));
 
 	TypeAutoService typeAutoService = new TypeAutoService();
+	TypeAuto typeAuto = typeAutoService.findTypeAuto(typeAutoId);
 	typeAutoService.deleteTypeAuto(typeAuto);
 
 	// response
+	Gson gson = new Gson();
 	List<TypeAuto> typeAutoList = typeAutoService.findAllTypeAuto();
 	String json = gson.toJson(typeAutoList);
 	response.getWriter().write(json);

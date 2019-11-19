@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class OsvetPriboryServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class OsvetPriboryServlet extends HttpServlet {
 
 	System.out.println("Enter OsvetPribory doPut");
 
-	OsvetPribory osvetPribory = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    osvetPribory = gson.fromJson((String) en.nextElement(), OsvetPribory.class);
-	}
+	OsvetPribory osvetPribory = gson.fromJson(body, OsvetPribory.class);
 
 	OsvetPriboryService osvetPriboryService = new OsvetPriboryService();
 	osvetPriboryService.updateOsvetPribory(osvetPribory);
@@ -110,20 +117,14 @@ public class OsvetPriboryServlet extends HttpServlet {
 
 	System.out.println("Enter OsvetPribory doDelete");
 
-	OsvetPribory osvetPribory = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    osvetPribory = gson.fromJson((String) en.nextElement(), OsvetPribory.class);
-	}
+	Integer osvetPriboryId = Integer.parseInt(request.getParameter("id_osvetPribory"));
 
 	OsvetPriboryService osvetPriboryService = new OsvetPriboryService();
+	OsvetPribory osvetPribory = osvetPriboryService.findOsvetPribory(osvetPriboryId);
 	osvetPriboryService.deleteOsvetPribory(osvetPribory);
 
 	// response
+	Gson gson = new Gson();
 	List<OsvetPribory> osvetPriboryList = osvetPriboryService.findAllOsvetPribory();
 	String json = gson.toJson(osvetPriboryList);
 	response.getWriter().write(json);

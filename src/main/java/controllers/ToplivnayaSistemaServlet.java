@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class ToplivnayaSistemaServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class ToplivnayaSistemaServlet extends HttpServlet {
 
 	System.out.println("Enter ToplivnayaSistema doPut");
 
-	ToplivnayaSistema toplivnayaSistema = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    toplivnayaSistema = gson.fromJson((String) en.nextElement(), ToplivnayaSistema.class);
-	}
+	ToplivnayaSistema toplivnayaSistema = gson.fromJson(body, ToplivnayaSistema.class);
 
 	ToplivnayaSistemaService toplivnayaSistemaService = new ToplivnayaSistemaService();
 	toplivnayaSistemaService.updateToplivnayaSistema(toplivnayaSistema);
@@ -110,20 +117,14 @@ public class ToplivnayaSistemaServlet extends HttpServlet {
 
 	System.out.println("Enter ToplivnayaSistema doDelete");
 
-	ToplivnayaSistema toplivnayaSistema = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    toplivnayaSistema = gson.fromJson((String) en.nextElement(), ToplivnayaSistema.class);
-	}
+	Integer toplivnayaSistemaId = Integer.parseInt(request.getParameter("id_toplivnayaSistema"));
 
 	ToplivnayaSistemaService toplivnayaSistemaService = new ToplivnayaSistemaService();
+	ToplivnayaSistema toplivnayaSistema = toplivnayaSistemaService.findToplivnayaSistema(toplivnayaSistemaId);
 	toplivnayaSistemaService.deleteToplivnayaSistema(toplivnayaSistema);
 
 	// response
+	Gson gson = new Gson();
 	List<ToplivnayaSistema> toplivnayaSistemaList = toplivnayaSistemaService.findAllToplivnayaSistema();
 	String json = gson.toJson(toplivnayaSistemaList);
 	response.getWriter().write(json);

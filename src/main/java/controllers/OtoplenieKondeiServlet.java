@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class OtoplenieKondeiServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class OtoplenieKondeiServlet extends HttpServlet {
 
 	System.out.println("Enter OtoplenieKondei doPut");
 
-	OtoplenieKondei otoplenieKondei = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    otoplenieKondei = gson.fromJson((String) en.nextElement(), OtoplenieKondei.class);
-	}
+	OtoplenieKondei otoplenieKondei = gson.fromJson(body, OtoplenieKondei.class);
 
 	OtoplenieKondeiService otoplenieKondeiService = new OtoplenieKondeiService();
 	otoplenieKondeiService.updateOtoplenieKondei(otoplenieKondei);
@@ -110,20 +117,14 @@ public class OtoplenieKondeiServlet extends HttpServlet {
 
 	System.out.println("Enter OtoplenieKondei doDelete");
 
-	OtoplenieKondei otoplenieKondei = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    otoplenieKondei = gson.fromJson((String) en.nextElement(), OtoplenieKondei.class);
-	}
+	Integer otoplenieKondeiId = Integer.parseInt(request.getParameter("id_otoplenieKondei"));
 
 	OtoplenieKondeiService otoplenieKondeiService = new OtoplenieKondeiService();
+	OtoplenieKondei otoplenieKondei = otoplenieKondeiService.findOtoplenieKondei(otoplenieKondeiId);
 	otoplenieKondeiService.deleteOtoplenieKondei(otoplenieKondei);
 
 	// response
+	Gson gson = new Gson();
 	List<OtoplenieKondei> otoplenieKondeiList = otoplenieKondeiService.findAllOtoplenieKondei();
 	String json = gson.toJson(otoplenieKondeiList);
 	response.getWriter().write(json);

@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class SistemaOhlajdeniyaServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class SistemaOhlajdeniyaServlet extends HttpServlet {
 
 	System.out.println("Enter SistemaOhlajdeniya doPut");
 
-	SistemaOhlajdeniya sistemaOhlajdeniya = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    sistemaOhlajdeniya = gson.fromJson((String) en.nextElement(), SistemaOhlajdeniya.class);
-	}
+	SistemaOhlajdeniya sistemaOhlajdeniya = gson.fromJson(body, SistemaOhlajdeniya.class);
 
 	SistemaOhlajdeniyaService sistemaOhlajdeniyaService = new SistemaOhlajdeniyaService();
 	sistemaOhlajdeniyaService.updateSistemaOhlajdeniya(sistemaOhlajdeniya);
@@ -110,20 +117,14 @@ public class SistemaOhlajdeniyaServlet extends HttpServlet {
 
 	System.out.println("Enter SistemaOhlajdeniya doDelete");
 
-	SistemaOhlajdeniya sistemaOhlajdeniya = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    sistemaOhlajdeniya = gson.fromJson((String) en.nextElement(), SistemaOhlajdeniya.class);
-	}
+	Integer sistemaOhlajdeniyaId = Integer.parseInt(request.getParameter("id_sistemaOhlajdeniya"));
 
 	SistemaOhlajdeniyaService sistemaOhlajdeniyaService = new SistemaOhlajdeniyaService();
+	SistemaOhlajdeniya sistemaOhlajdeniya = sistemaOhlajdeniyaService.findSistemaOhlajdeniya(sistemaOhlajdeniyaId);
 	sistemaOhlajdeniyaService.deleteSistemaOhlajdeniya(sistemaOhlajdeniya);
 
 	// response
+	Gson gson = new Gson();
 	List<SistemaOhlajdeniya> sistemaOhlajdeniyaList = sistemaOhlajdeniyaService.findAllSistemaOhlajdeniya();
 	String json = gson.toJson(sistemaOhlajdeniyaList);
 	response.getWriter().write(json);

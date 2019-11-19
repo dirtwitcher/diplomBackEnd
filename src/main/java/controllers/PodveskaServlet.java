@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class PodveskaServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class PodveskaServlet extends HttpServlet {
 
 	System.out.println("Enter Podveska doPut");
 
-	Podveska podveska = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    podveska = gson.fromJson((String) en.nextElement(), Podveska.class);
-	}
+	Podveska podveska = gson.fromJson(body, Podveska.class);
 
 	PodveskaService podveskaService = new PodveskaService();
 	podveskaService.updatePodveska(podveska);
@@ -110,20 +117,14 @@ public class PodveskaServlet extends HttpServlet {
 
 	System.out.println("Enter Podveska doDelete");
 
-	Podveska podveska = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    podveska = gson.fromJson((String) en.nextElement(), Podveska.class);
-	}
+	Integer podveskaId = Integer.parseInt(request.getParameter("id_podveska"));
 
 	PodveskaService podveskaService = new PodveskaService();
+	Podveska podveska = podveskaService.findPodveska(podveskaId);
 	podveskaService.deletePodveska(podveska);
 
 	// response
+	Gson gson = new Gson();
 	List<Podveska> podveskaList = podveskaService.findAllPodveska();
 	String json = gson.toJson(podveskaList);
 	response.getWriter().write(json);

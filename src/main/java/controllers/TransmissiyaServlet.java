@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class TransmissiyaServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class TransmissiyaServlet extends HttpServlet {
 
 	System.out.println("Enter Transmissiya doPut");
 
-	Transmissiya transmissiya = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    transmissiya = gson.fromJson((String) en.nextElement(), Transmissiya.class);
-	}
+	Transmissiya transmissiya = gson.fromJson(body, Transmissiya.class);
 
 	TransmissiyaService transmissiyaService = new TransmissiyaService();
 	transmissiyaService.updateTransmissiya(transmissiya);
@@ -110,20 +117,14 @@ public class TransmissiyaServlet extends HttpServlet {
 
 	System.out.println("Enter Transmissiya doDelete");
 
-	Transmissiya transmissiya = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    transmissiya = gson.fromJson((String) en.nextElement(), Transmissiya.class);
-	}
+	Integer transmissiyaId = Integer.parseInt(request.getParameter("id_transmissiya"));
 
 	TransmissiyaService transmissiyaService = new TransmissiyaService();
+	Transmissiya transmissiya = transmissiyaService.findTransmissiya(transmissiyaId);
 	transmissiyaService.deleteTransmissiya(transmissiya);
 
 	// response
+	Gson gson = new Gson();
 	List<Transmissiya> transmissiyaList = transmissiyaService.findAllTransmissiya();
 	String json = gson.toJson(transmissiyaList);
 	response.getWriter().write(json);

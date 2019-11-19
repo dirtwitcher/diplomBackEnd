@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,6 +36,7 @@ public class DopTovariServlet extends HttpServlet {
 
 	Gson gson = new Gson();
 	DopTovariService dopTovariService = new DopTovariService();
+
 	List<DopTovari> dopTovariList = dopTovariService.findAllDopTovari();
 	String json = gson.toJson(dopTovariList);
 	response.getWriter().write(json);
@@ -69,6 +72,17 @@ public class DopTovariServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +94,9 @@ public class DopTovariServlet extends HttpServlet {
 
 	System.out.println("Enter DopTovari doPut");
 
-	DopTovari dopTovari = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    dopTovari = gson.fromJson((String) en.nextElement(), DopTovari.class);
-	}
+	DopTovari dopTovari = gson.fromJson(body, DopTovari.class);
 
 	DopTovariService dopTovariService = new DopTovariService();
 	dopTovariService.updateDopTovari(dopTovari);
@@ -110,20 +118,14 @@ public class DopTovariServlet extends HttpServlet {
 
 	System.out.println("Enter DopTovari doDelete");
 
-	DopTovari dopTovari = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    dopTovari = gson.fromJson((String) en.nextElement(), DopTovari.class);
-	}
+	Integer dopTovariId = Integer.parseInt(request.getParameter("id_dopTovari"));
 
 	DopTovariService dopTovariService = new DopTovariService();
+	DopTovari dopTovari = dopTovariService.findDopTovari(dopTovariId);
 	dopTovariService.deleteDopTovari(dopTovari);
 
 	// response
+	Gson gson = new Gson();
 	List<DopTovari> dopTovariList = dopTovariService.findAllDopTovari();
 	String json = gson.toJson(dopTovariList);
 	response.getWriter().write(json);

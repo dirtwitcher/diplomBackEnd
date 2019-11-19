@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class KolesaDiskiServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class KolesaDiskiServlet extends HttpServlet {
 
 	System.out.println("Enter KolesaDiski doPut");
 
-	KolesaDiski kolesaDiski = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    kolesaDiski = gson.fromJson((String) en.nextElement(), KolesaDiski.class);
-	}
+	KolesaDiski kolesaDiski = gson.fromJson(body, KolesaDiski.class);
 
 	KolesaDiskiService kolesaDiskiService = new KolesaDiskiService();
 	kolesaDiskiService.updateKolesaDiski(kolesaDiski);
@@ -110,20 +117,14 @@ public class KolesaDiskiServlet extends HttpServlet {
 
 	System.out.println("Enter KolesaDiski doDelete");
 
-	KolesaDiski kolesaDiski = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    kolesaDiski = gson.fromJson((String) en.nextElement(), KolesaDiski.class);
-	}
+	Integer kolesaDiskiId = Integer.parseInt(request.getParameter("id_kolesaDiski"));
 
 	KolesaDiskiService kolesaDiskiService = new KolesaDiskiService();
+	KolesaDiski kolesaDiski = kolesaDiskiService.findKolesaDiski(kolesaDiskiId);
 	kolesaDiskiService.deleteKolesaDiski(kolesaDiski);
 
 	// response
+	Gson gson = new Gson();
 	List<KolesaDiski> kolesaDiskiList = kolesaDiskiService.findAllKolesaDiski();
 	String json = gson.toJson(kolesaDiskiList);
 	response.getWriter().write(json);

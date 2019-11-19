@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,6 +36,7 @@ public class DvigatelServlet extends HttpServlet {
 
 	Gson gson = new Gson();
 	DvigatelService dvigatelService = new DvigatelService();
+
 	List<Dvigatel> dvigatelList = dvigatelService.findAllDvigatel();
 	String json = gson.toJson(dvigatelList);
 	response.getWriter().write(json);
@@ -69,6 +72,17 @@ public class DvigatelServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +94,9 @@ public class DvigatelServlet extends HttpServlet {
 
 	System.out.println("Enter Dvigatel doPut");
 
-	Dvigatel dvigatel = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    dvigatel = gson.fromJson((String) en.nextElement(), Dvigatel.class);
-	}
+	Dvigatel dvigatel = gson.fromJson(body, Dvigatel.class);
 
 	DvigatelService dvigatelService = new DvigatelService();
 	dvigatelService.updateDvigatel(dvigatel);
@@ -110,20 +118,14 @@ public class DvigatelServlet extends HttpServlet {
 
 	System.out.println("Enter Dvigatel doDelete");
 
-	Dvigatel dvigatel = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    dvigatel = gson.fromJson((String) en.nextElement(), Dvigatel.class);
-	}
+	Integer dvigatelId = Integer.parseInt(request.getParameter("id_dvigatel"));
 
 	DvigatelService dvigatelService = new DvigatelService();
+	Dvigatel dvigatel = dvigatelService.findDvigatel(dvigatelId);
 	dvigatelService.deleteDvigatel(dvigatel);
 
 	// response
+	Gson gson = new Gson();
 	List<Dvigatel> dvigatelList = dvigatelService.findAllDvigatel();
 	String json = gson.toJson(dvigatelList);
 	response.getWriter().write(json);

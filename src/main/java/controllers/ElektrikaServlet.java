@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class ElektrikaServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class ElektrikaServlet extends HttpServlet {
 
 	System.out.println("Enter Elektrika doPut");
 
-	Elektrika elektrika = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    elektrika = gson.fromJson((String) en.nextElement(), Elektrika.class);
-	}
+	Elektrika elektrika = gson.fromJson(body, Elektrika.class);
 
 	ElektrikaService elektrikaService = new ElektrikaService();
 	elektrikaService.updateElektrika(elektrika);
@@ -110,20 +117,14 @@ public class ElektrikaServlet extends HttpServlet {
 
 	System.out.println("Enter Elektrika doDelete");
 
-	Elektrika elektrika = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    elektrika = gson.fromJson((String) en.nextElement(), Elektrika.class);
-	}
+	Integer elektrikaId = Integer.parseInt(request.getParameter("id_elektrika"));
 
 	ElektrikaService elektrikaService = new ElektrikaService();
+	Elektrika elektrika = elektrikaService.findElektrika(elektrikaId);
 	elektrikaService.deleteElektrika(elektrika);
 
 	// response
+	Gson gson = new Gson();
 	List<Elektrika> elektrikaList = elektrikaService.findAllElektrika();
 	String json = gson.toJson(elektrikaList);
 	response.getWriter().write(json);

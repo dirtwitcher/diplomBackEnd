@@ -1,8 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,6 +71,17 @@ public class RulevoeUpravlenieServlet extends HttpServlet {
 	response.getWriter().write(json);
     }
 
+    private static String inputStreamToString(InputStream inputStream) {
+	String result = "";
+	Scanner scanner = new Scanner(inputStream, "UTF-8");
+	if (scanner.hasNext())
+	    result = scanner.useDelimiter("\\A").next();
+	else
+	    result = "";
+	scanner.close();
+	return result;
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -80,15 +93,9 @@ public class RulevoeUpravlenieServlet extends HttpServlet {
 
 	System.out.println("Enter RulevoeUpravlenie doPut");
 
-	RulevoeUpravlenie rulevoeUpravlenie = null;
-
+	String body = inputStreamToString(request.getInputStream());
 	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    rulevoeUpravlenie = gson.fromJson((String) en.nextElement(), RulevoeUpravlenie.class);
-	}
+	RulevoeUpravlenie rulevoeUpravlenie = gson.fromJson(body, RulevoeUpravlenie.class);
 
 	RulevoeUpravlenieService rulevoeUpravlenieService = new RulevoeUpravlenieService();
 	rulevoeUpravlenieService.updateRulevoeUpravlenie(rulevoeUpravlenie);
@@ -110,20 +117,14 @@ public class RulevoeUpravlenieServlet extends HttpServlet {
 
 	System.out.println("Enter RulevoeUpravlenie doDelete");
 
-	RulevoeUpravlenie rulevoeUpravlenie = null;
-
-	Gson gson = new Gson();
-	@SuppressWarnings("rawtypes")
-	Enumeration en = request.getParameterNames();
-
-	while (en.hasMoreElements()) {
-	    rulevoeUpravlenie = gson.fromJson((String) en.nextElement(), RulevoeUpravlenie.class);
-	}
+	Integer rulevoeUpravlenieId = Integer.parseInt(request.getParameter("id_rulevoeUpravlenie"));
 
 	RulevoeUpravlenieService rulevoeUpravlenieService = new RulevoeUpravlenieService();
+	RulevoeUpravlenie rulevoeUpravlenie = rulevoeUpravlenieService.findRulevoeUpravlenie(rulevoeUpravlenieId);
 	rulevoeUpravlenieService.deleteRulevoeUpravlenie(rulevoeUpravlenie);
 
 	// response
+	Gson gson = new Gson();
 	List<RulevoeUpravlenie> rulevoeUpravlenieList = rulevoeUpravlenieService.findAllRulevoeUpravlenie();
 	String json = gson.toJson(rulevoeUpravlenieList);
 	response.getWriter().write(json);
