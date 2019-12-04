@@ -46,7 +46,7 @@ public class KppImpl implements CrudInterface<Kpp> {
     public List<Kpp> findAll() {
 	// TODO Auto-generated method stub
 	@SuppressWarnings("unchecked")
-	List<Kpp> kpp = HibernateSessionFactory.getSessionFactory().openSession().createQuery("From Auto").list();
+	List<Kpp> kpp = HibernateSessionFactory.getSessionFactory().openSession().createQuery("From Kpp").list();
 	return kpp;
     }
 

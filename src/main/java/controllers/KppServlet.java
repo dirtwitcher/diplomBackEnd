@@ -50,7 +50,7 @@ public class KppServlet extends HttpServlet {
 	response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 	response.setHeader("Access-Control-Allow-Methods", "POST");
 
-	System.out.println("Enter AUTO doPost");
+	System.out.println("Enter Kpp doPost");
 
 	Kpp kpp = null;
 

@@ -63,6 +63,8 @@ public class AutoServlet extends HttpServlet {
 	    auto = gson.fromJson((String) en.nextElement(), Auto.class);
 	}
 
+	System.out.println(auto);
+
 	AutoService autoService = new AutoService();
 	autoService.createAuto(auto);
 
