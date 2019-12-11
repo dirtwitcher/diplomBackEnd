@@ -54,7 +54,7 @@ public class KolesaDiski {
     @Column(name = "garantiya", length = 25)
     private String garantiya;
 
-    @Column(name = "dopComment", length = 25)
+    @Column(name = "dopComment", length = 250)
     private String dopComment;
 
     @Column(name = "foto")

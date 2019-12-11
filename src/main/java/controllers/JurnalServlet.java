@@ -64,9 +64,9 @@ public class JurnalServlet extends HttpServlet {
 	jurnalService.createJurnal(jurnal);
 
 	// response
-	List<Jurnal> jurnalList = jurnalService.findAllJurnal();
-	String json = gson.toJson(jurnalList);
-	response.getWriter().write(json);
+	// List<Jurnal> jurnalList = jurnalService.findAllJurnal();
+	// String json = gson.toJson(jurnalList);
+	// response.getWriter().write(json);
     }
 
 }

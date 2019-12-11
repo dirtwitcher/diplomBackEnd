@@ -17,8 +17,11 @@ public class Polzovatel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_polzovatel;
 
-    @Column(name = "FIO", length = 250)
-    private String FIO;
+    @Column(name = "login", length = 250)
+    private String login;
+
+    @Column(name = "password", length = 250)
+    private String password;
 
     @Column(name = "dataRegistr")
     private Date dataRegistr;
@@ -34,12 +37,20 @@ public class Polzovatel {
 //	this.id_polzovatel = id_polzovatel;
 //    }
 
-    public String getFIO() {
-	return FIO;
+    public String getLogin() {
+	return login;
     }
 
-    public void setFIO(String fIO) {
-	FIO = fIO;
+    public void setLogin(String login) {
+	this.login = login;
+    }
+
+    public String getPassword() {
+	return password;
+    }
+
+    public void setPassword(String password) {
+	this.password = password;
     }
 
     public Date getDataRegistr() {
@@ -52,7 +63,7 @@ public class Polzovatel {
 
     @Override
     public String toString() {
-	return "Polzovatel [id_polzovatel=" + id_polzovatel + ", FIO=" + FIO + ", dataRegistr=" + dataRegistr + "]";
+	return "Polzovatel [id_polzovatel=" + id_polzovatel + ", FIO=" + login + ", dataRegistr=" + dataRegistr + "]";
     }
 
 }

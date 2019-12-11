@@ -89,7 +89,7 @@ public class Auto {
 //    @Column(name = "korobka", length = 25) // no sense
 //    private String korobka;
 
-    @Column(name = "privod", length = 25)
+    @Column(name = "privod", length = 20)
     private String privod;
 
     @Column(name = "probeg")

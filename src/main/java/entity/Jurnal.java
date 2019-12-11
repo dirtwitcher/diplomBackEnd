@@ -20,10 +20,10 @@ public class Jurnal {
     @Column(name = "FIO", length = 250)
     private String FIO;
 
-    @Column(name = "tablica", length = 25)
+    @Column(name = "tablica", length = 150)
     private String tablica;
 
-    @Column(name = "deistvie", length = 25)
+    @Column(name = "deistvie", length = 150)
     private String deistvie;
 
     @Column(name = "dataRegistr")
