@@ -26,7 +26,7 @@ public class Kpp {
     private int kolvoStupeney;
 
     @Column(name = "garantiya", length = 25)
-    private int garantiya;
+    private String garantiya;
 
     @Column(name = "dopComment", length = 250)
     private String dopComment;
